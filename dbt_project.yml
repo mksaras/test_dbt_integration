@@ -9,6 +9,19 @@ config-version: 2
 # This setting configures which "profile" dbt uses for this project.
 profile: 'default'
 
+vars:
+  # raw_database: "EDM"
+  # raw_schema: "EDM"
+  raw_database: "mkdw"
+  raw_schema: "mk_raw_data"
+  mdl_database: "mkdw"
+  native_database: "mkdw"
+  native_schema: "analytics-449409"
+  mdl_schema:  "{{ env_var('DBT_MDL_SCHEMA') }}_mk_mdl_prerequisites"
+  pres_database: "mkdatondw"
+  pres_schema:  "{{ env_var('DBT_MDL_SCHEMA') }}_mk_presentation"
+  audit_schema: "{{env_var('DBT_METADATA')}}_mashburn_metadata"
+  surrogate_key_treat_nulls_as_empty_strings: True
 # These configurations specify where dbt should look for different types of files.
 # The `model-paths` config, for example, states that models in this project can be
 # found in the "models/" directory. You probably won't need to change these!
@@ -37,6 +50,12 @@ clean-targets:         # directories to be removed by `dbt clean`
 
 models:
   my_new_project:
+    +persist_docs: 
+      relation: True
+      columns: True
     # Applies to all files under models/example/
     example:
+      +schema: "{{ env_var('DBT_MDL_SCHEMA') }}_mk_mdl"
       +materialized: table
+
+# on-run-end: "{{ log_dbt_results(results) }}"
