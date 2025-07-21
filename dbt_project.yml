@@ -55,7 +55,7 @@ models:
       columns: True
     # Applies to all files under models/example/
     example:
-      +schema: "{{ env_var('DBT_MDL_SCHEMA') }}_mk_mdl"
+      +schema: "example"
       +materialized: table
 
 # on-run-end: "{{ log_dbt_results(results) }}"
